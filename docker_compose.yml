@@ -1,0 +1,29 @@
+version: "3.8"
+services:
+  flask:
+    build:
+      context: .
+      dockerfile: flask/Dockerfile
+    container_name: fullcrud_flask
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=production
+      - SECRET_KEY=dev-secret-key
+      - DATABASE_URL=sqlite:///./tasks.db
+    volumes:
+      - ./flask:/app   # optional: mount for dev; remove in prod
+    restart: unless-stopped
+
+  fastapi:
+    build:
+      context: .
+      dockerfile: fastapi/Dockerfile
+    container_name: fullcrud_fastapi
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=sqlite:///./tasks_fastapi.db
+    volumes:
+      - ./fastapi:/app  # optional: mount for dev; remove in prod
+    restart: unless-stopped
